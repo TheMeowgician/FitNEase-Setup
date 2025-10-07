@@ -536,6 +536,54 @@ npx expo start
 
 ## 🆘 Troubleshooting
 
+### Problem: "Access denied for user 'root'" during migrations
+**Error message:** `SQLSTATE[HY000] [1045] Access denied for user 'root'@'172.18.x.x' (using password: YES)`
+
+**This happens when database containers were created with old/wrong passwords.**
+
+**Solution - Reset Database Containers:**
+
+⚠️ **WARNING: This will delete all data in the databases!**
+
+```bash
+# 1. Stop all containers
+docker-compose down
+
+# 2. Remove database volumes (this deletes the data)
+docker volume ls
+docker volume rm fitnease-setup_fitnease-auth-db-data
+docker volume rm fitnease-setup_fitnease-social-db-data
+docker volume rm fitnease-setup_fitnease-tracking-db-data
+docker volume rm fitnease-setup_fitnease-content-db-data
+docker volume rm fitnease-setup_fitnease-comms-db-data
+docker volume rm fitnease-setup_fitnease-engagement-db-data
+docker volume rm fitnease-setup_fitnease-media-db-data
+docker volume rm fitnease-setup_fitnease-ml-db-data
+docker volume rm fitnease-setup_fitnease-operations-db-data
+docker volume rm fitnease-setup_fitnease-planning-db-data
+
+# OR remove all volumes at once:
+docker-compose down -v
+
+# 3. Verify your .env has matching passwords
+# Make sure DB_PASSWORD and MYSQL_ROOT_PASSWORD are the same!
+
+# 4. Start containers again (they'll be created with new password)
+docker-compose up -d
+
+# 5. Wait 2-3 minutes for databases to initialize
+
+# 6. Try migrations again
+docker-compose exec fitnease-auth php artisan migrate --force
+```
+
+**Quick reset command (deletes everything and starts fresh):**
+```bash
+docker-compose down -v && docker-compose up -d
+```
+
+---
+
 ### Problem: "Docker daemon is not running"
 **Solution:**
 - Open Docker Desktop application
