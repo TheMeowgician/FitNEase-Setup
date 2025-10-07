@@ -15,13 +15,10 @@
 - Download "Docker Desktop for Windows"
 - Run installer
 - Restart computer when prompted
-- **Important:** Allocate at least 4GB RAM to Docker
-  - Open Docker Desktop → Settings → Resources → Memory → Set to 4GB+
 
 **Mac:**
 - Download "Docker Desktop for Mac"
 - Install and open Docker Desktop
-- Allocate 4GB+ RAM in settings
 
 **Linux:**
 - Follow instructions at: https://docs.docker.com/engine/install/
