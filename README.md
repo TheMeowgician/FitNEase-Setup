@@ -9,21 +9,26 @@
 ## 📋 Prerequisites (Install These First)
 
 ### 1. Docker Desktop ⭐ REQUIRED
+
 **Download:** https://www.docker.com/products/docker-desktop/
 
 **Windows:**
+
 - Download "Docker Desktop for Windows"
 - Run installer
 - Restart computer when prompted
 
 **Mac:**
+
 - Download "Docker Desktop for Mac"
 - Install and open Docker Desktop
 
 **Linux:**
+
 - Follow instructions at: https://docs.docker.com/engine/install/
 
 **Verify installation:**
+
 ```bash
 docker --version
 docker-compose --version
@@ -32,6 +37,7 @@ docker-compose --version
 ---
 
 ### 2. Node.js (version 18 or higher) ⭐ REQUIRED
+
 **Download:** https://nodejs.org/
 
 - Download the LTS (Long Term Support) version
@@ -39,6 +45,7 @@ docker-compose --version
 - Restart terminal after installation
 
 **Verify installation:**
+
 ```bash
 node --version
 npm --version
@@ -47,12 +54,14 @@ npm --version
 ---
 
 ### 3. Git ⭐ REQUIRED
+
 **Download:** https://git-scm.com/downloads
 
 - Download for your OS
 - Run installer (choose default options)
 
 **Verify installation:**
+
 ```bash
 git --version
 ```
@@ -60,10 +69,13 @@ git --version
 ---
 
 ### 4. Expo Go App (on your phone) 📱 REQUIRED
+
 **For Android:**
+
 - Google Play Store → Search "Expo Go" → Install
 
 **For iPhone:**
+
 - App Store → Search "Expo Go" → Install
 
 ---
@@ -86,6 +98,7 @@ cd FitNEase-Setup
 ```
 
 **What you should see:**
+
 ```
 FitNEase-Setup/
 ├── docker-compose.yml
@@ -103,6 +116,7 @@ FitNEase-Setup/
 ⚠️ **IMPORTANT: Make sure you're in the FitNEase-Setup folder first!**
 
 Check your current directory:
+
 ```bash
 pwd    # Mac/Linux
 cd     # Windows
@@ -111,6 +125,7 @@ cd     # Windows
 You should see: `.../FitNEase-Setup`
 
 If not, navigate to it:
+
 ```bash
 cd FitNEase-Setup    # If you're one level up
 ```
@@ -118,27 +133,32 @@ cd FitNEase-Setup    # If you're one level up
 **Now run the clone script:**
 
 **Windows:**
+
 ```bash
 clone-services.bat
 ```
 
 **Mac/Linux:**
+
 ```bash
 chmod +x clone-services.sh
 ./clone-services.sh
 ```
 
 **What this does:**
+
 - Clones all 10 backend services
 - Clones the mobile app
 - Takes 5-10 minutes depending on internet speed
 
 **Wait for it to complete!** You should see:
+
 ```
 ✅ All services cloned successfully!
 ```
 
 **After completion, you should see:**
+
 ```
 FitNEase-Setup/
 ├── docker-compose.yml
@@ -156,6 +176,7 @@ FitNEase-Setup/
 ⚠️ **IMPORTANT: You should still be in the FitNEase-Setup folder**
 
 Check your current directory:
+
 ```bash
 pwd    # Mac/Linux - should show .../FitNEase-Setup
 cd     # Windows - should show ...\FitNEase-Setup
@@ -164,12 +185,14 @@ cd     # Windows - should show ...\FitNEase-Setup
 **Now create and edit the .env file:**
 
 **Windows:**
+
 ```bash
 copy .env.example .env
 notepad .env
 ```
 
 **Mac/Linux:**
+
 ```bash
 cp .env.example .env
 nano .env
@@ -188,6 +211,7 @@ MYSQL_ROOT_PASSWORD=CHANGE_THIS_PASSWORD
 ⚠️ **VERY IMPORTANT:** `DB_PASSWORD` and `MYSQL_ROOT_PASSWORD` **MUST BE THE SAME VALUE**!
 
 **Example:**
+
 ```env
 # Both passwords must match!
 DB_PASSWORD=mypassword123
@@ -204,6 +228,7 @@ MYSQL_ROOT_PASSWORD=rootpassword
 **Save and close the file.**
 
 ⚠️ **Important:**
+
 - Use simple passwords for local testing (no special characters that might cause issues)
 - The two database passwords MUST be identical or migrations will fail
 
@@ -220,6 +245,7 @@ MYSQL_ROOT_PASSWORD=rootpassword
 The auth and communications services need email configuration for sending verification emails and notifications.
 
 **Configure fitnease-auth:**
+
 ```bash
 cd fitnease-auth
 
@@ -232,16 +258,19 @@ copy .env.example .env  # Windows
 Open `.env` and update email settings:
 
 **Windows:**
+
 ```bash
 notepad .env
 ```
 
 **Mac/Linux:**
+
 ```bash
 nano .env
 ```
 
 Find and update:
+
 ```env
 MAIL_MAILER=smtp
 MAIL_HOST=smtp.gmail.com
@@ -253,11 +282,13 @@ MAIL_FROM_NAME="FitNEase"
 ```
 
 Save and go back:
+
 ```bash
 cd ..
 ```
 
 **Configure fitnease-comms (same email settings):**
+
 ```bash
 cd fitnease-comms
 
@@ -268,11 +299,13 @@ copy .env.example .env  # Windows
 ```
 
 Open `.env` and update the same email settings as above, then:
+
 ```bash
 cd ..
 ```
 
 **How to get Gmail App Password:**
+
 1. Go to your Google Account settings
 2. Enable 2-Step Verification
 3. Go to Security → 2-Step Verification → App passwords
@@ -282,11 +315,16 @@ cd ..
 ---
 
 💡 **Note:**
+
 - **All other services (including ML service) don't need manual .env configuration** - Docker Compose handles all their settings automatically
+- **IMPORTANT: Do NOT create or modify .env files for other services** (social, tracking, content, engagement, media, operations, planning, ml) - this can cause connectivity issues
 - If you skip email configuration:
   - Email verification/notifications won't work (but registration and login still work)
 
+⚠️ **If you accidentally created a .env file for fitnease-ml:** Delete it, as Docker Compose already provides the correct configuration automatically.
+
 Make sure you're back in the FitNEase-Setup folder before continuing:
+
 ```bash
 pwd    # Should show: .../FitNEase-Setup
 ```
@@ -306,17 +344,20 @@ pwd    # Should show: .../FitNEase-Setup
 ⚠️ **IMPORTANT: Make sure you're in the FitNEase-Setup folder**
 
 Check your current directory:
+
 ```bash
 pwd    # Mac/Linux - should show .../FitNEase-Setup
 cd     # Windows - should show ...\FitNEase-Setup
 ```
 
 If you're not in FitNEase-Setup, navigate to it:
+
 ```bash
 cd FitNEase-Setup
 ```
 
 **Now start all services:**
+
 ```bash
 docker-compose up -d
 ```
@@ -324,6 +365,7 @@ docker-compose up -d
 This takes 5-10 minutes the first time.
 
 **What this does:**
+
 - Builds and starts 10 backend services
 - Starts 10 databases
 - Starts Redis cache
@@ -332,11 +374,13 @@ This takes 5-10 minutes the first time.
 **First time will take 10-15 minutes** to download and build everything.
 
 **Wait until you see:**
+
 ```
 ✅ All services started successfully
 ```
 
 **Check status:**
+
 ```bash
 docker-compose ps
 ```
@@ -352,6 +396,7 @@ All services should show "Up" or "healthy" status.
 Services need time to start up completely.
 
 **Wait 2-3 minutes**, then check logs:
+
 ```bash
 docker-compose logs -f
 ```
@@ -365,6 +410,7 @@ Press `Ctrl+C` to stop viewing logs.
 ⚠️ **IMPORTANT: You should still be in the FitNEase-Setup folder**
 
 ⚠️ **If you changed your .env passwords after starting Docker containers:** You MUST reset the database volumes first, otherwise migrations will fail with "Access denied" errors. Run:
+
 ```bash
 docker-compose down -v
 docker-compose up -d
@@ -395,9 +441,33 @@ docker-compose exec fitnease-operations composer install
 docker-compose exec fitnease-planning composer install
 ```
 
-**Note:** fitnease-ml is a Python Flask service and doesn't need composer install (Python dependencies are installed automatically when the container starts)
+w**Note:** fitnease-ml is a Python Flask service and doesn't need composer install (Python dependencies are installed automatically when the container starts)
 
 **Wait for all composer installs to complete (each takes 30-60 seconds)**
+
+**Then generate Laravel encryption keys (IMPORTANT - required for services to work properly):**
+
+```bash
+docker-compose exec fitnease-auth php artisan key:generate
+
+docker-compose exec fitnease-social php artisan key:generate
+
+docker-compose exec fitnease-tracking php artisan key:generate
+
+docker-compose exec fitnease-content php artisan key:generate
+
+docker-compose exec fitnease-comms php artisan key:generate
+
+docker-compose exec fitnease-engagement php artisan key:generate
+
+docker-compose exec fitnease-media php artisan key:generate
+
+docker-compose exec fitnease-operations php artisan key:generate
+
+docker-compose exec fitnease-planning php artisan key:generate
+```
+
+**Each command should show:** `INFO  Application key set successfully.`
 
 **Then run database migrations for Laravel services:**
 
@@ -422,10 +492,29 @@ docker-compose exec fitnease-planning php artisan migrate --force
 ```
 
 **Each migration command should show:**
+
 ```
 Migration table created successfully.
 Migrating: ...
 Migrated: ...
+```
+
+**Seed email templates for the communications service (required for email verification to work):**
+
+```bash
+docker-compose exec fitnease-comms php artisan db:seed --force
+```
+
+**Run ML service database migrations (required for exercise recommendations to work):**
+
+```bash
+docker-compose exec fitnease-ml python migrate.py
+```
+
+**Restart services to apply all changes:**
+
+```bash
+docker-compose restart fitnease-auth fitnease-comms fitnease-ml
 ```
 
 ---
@@ -444,11 +533,13 @@ cd     # Windows
 **Navigate to the mobile app folder:**
 
 **If you're in FitNEase-Setup folder:**
+
 ```bash
 cd fitnease-client
 ```
 
 **If you're starting from Desktop or another location:**
+
 ```bash
 # Windows example:
 cd Desktop\FitNEase-Setup\fitnease-client
@@ -458,11 +549,13 @@ cd Desktop/FitNEase-Setup/fitnease-client
 ```
 
 **Verify you're in the right place** - you should see:
+
 ```bash
 pwd    # Should show: .../FitNEase-Setup/fitnease-client
 ```
 
 **Now install dependencies:**
+
 ```bash
 npm install
 ```
@@ -472,11 +565,13 @@ npm install
 Open the file: `config/api.config.ts`
 
 **Windows:**
+
 ```bash
 notepad config\api.config.ts
 ```
 
 **Mac/Linux:**
+
 ```bash
 nano config/api.config.ts
 ```
@@ -484,26 +579,29 @@ nano config/api.config.ts
 **Update the configuration:**
 
 1. Find your computer's IP address first:
+
    - **Windows:** Open Command Prompt, run `ipconfig`, look for "IPv4 Address"
    - **Mac:** Open Terminal, run `ifconfig | grep "inet "`, look for 192.168.x.x
 
 2. In the `api.config.ts` file:
+
    ```typescript
    // Change ACTIVE_MEMBER to your name
-   const ACTIVE_MEMBER = 'Gab'; // Change to: 'Gab', 'Wimari', 'Nhiko', or 'Chrystian'
+   const ACTIVE_MEMBER = "Gab"; // Change to: 'Gab', 'Wimari', 'Nhiko', or 'Chrystian'
 
    // Update your IP in TEAM_IPS
    const TEAM_IPS = {
-     Gab: '192.168.1.5',              // ← Replace with your actual IP
-     Wimari: 'CHANGE_THIS_TO_YOUR_IP',
-     Nhiko: 'CHANGE_THIS_TO_YOUR_IP',
-     Chrystian: 'CHANGE_THIS_TO_YOUR_IP',
+     Gab: "192.168.1.5", // ← Replace with your actual IP
+     Wimari: "CHANGE_THIS_TO_YOUR_IP",
+     Nhiko: "CHANGE_THIS_TO_YOUR_IP",
+     Chrystian: "CHANGE_THIS_TO_YOUR_IP",
    };
    ```
 
 3. Save the file and close the editor
 
 **Now start Expo:**
+
 ```bash
 npx expo start
 ```
@@ -521,6 +619,7 @@ npx expo start
 **Android:** Use Expo Go's built-in QR scanner
 
 **iPhone:**
+
 - Open Camera app
 - Point at QR code
 - Tap the notification that appears
@@ -544,6 +643,7 @@ npx expo start
 ## 🆘 Troubleshooting
 
 ### Problem: "Access denied for user 'root'" during migrations
+
 **Error message:** `SQLSTATE[HY000] [1045] Access denied for user 'root'@'172.18.x.x' (using password: YES)`
 
 **This happens when database containers were created with old/wrong passwords.**
@@ -585,6 +685,7 @@ docker-compose exec fitnease-auth php artisan migrate --force
 ```
 
 **Quick reset command (deletes everything and starts fresh):**
+
 ```bash
 docker-compose down -v && docker-compose up -d
 ```
@@ -592,7 +693,9 @@ docker-compose down -v && docker-compose up -d
 ---
 
 ### Problem: "Docker daemon is not running"
+
 **Solution:**
+
 - Open Docker Desktop application
 - Wait until it says "Running"
 - Try command again
@@ -600,6 +703,7 @@ docker-compose down -v && docker-compose up -d
 ---
 
 ### Problem: "Port already in use"
+
 **Solution:**
 
 ⚠️ **Make sure you're in the FitNEase-Setup folder first!**
@@ -620,25 +724,31 @@ docker-compose up -d
 ---
 
 ### Problem: "Cannot connect to backend from mobile app"
+
 **Solution:**
 
 **Find your computer's IP address:**
 
 **Windows:**
+
 ```bash
 ipconfig
 ```
+
 Look for "IPv4 Address" (e.g., 192.168.1.100)
 
 **Mac:**
+
 ```bash
 ifconfig | grep "inet "
 ```
+
 Look for 192.168.x.x
 
 **Update API configuration:**
 
 Navigate to the client folder and open the config file:
+
 ```bash
 # From FitNEase-Setup folder:
 cd fitnease-client
@@ -649,17 +759,19 @@ nano config/api.config.ts        # Mac/Linux
 ```
 
 Change `localhost` to your IP address:
+
 ```typescript
 // Change from:
-baseURL: 'http://localhost:8090/auth'
+baseURL: "http://localhost:8090/auth";
 
 // To:
-baseURL: 'http://192.168.1.100:8090/auth'
+baseURL: "http://192.168.1.100:8090/auth";
 ```
 
 Do this for all services in the config file.
 
 Then restart Expo (make sure you're in fitnease-client folder):
+
 ```bash
 pwd    # Should show: .../FitNEase-Setup/fitnease-client
 
@@ -669,7 +781,9 @@ npx expo start --clear
 ---
 
 ### Problem: Services won't start / Out of memory
+
 **Solution:**
+
 1. Close all other applications
 2. Increase Docker memory:
    - Docker Desktop → Settings → Resources
@@ -680,6 +794,7 @@ npx expo start --clear
 ---
 
 ### Problem: "migration" command fails
+
 **Solution:**
 
 ⚠️ **Make sure you're in the FitNEase-Setup folder first!**
@@ -700,7 +815,9 @@ docker-compose logs fitnease-auth
 ---
 
 ### Problem: Expo QR code won't scan
+
 **Solution:**
+
 1. Make sure phone and laptop are on SAME WiFi
 2. Try connection type:
    - Press `s` in terminal (switch to Expo Go)
@@ -709,6 +826,7 @@ docker-compose logs fitnease-auth
 ---
 
 ### Problem: App shows blank screen
+
 **Solution:**
 
 ⚠️ **Make sure you're in the fitnease-client folder!**
@@ -731,6 +849,7 @@ npx expo start --clear
 ⚠️ **All commands require you to be in the correct directory!**
 
 ### Start services:
+
 ```bash
 # Navigate to FitNEase-Setup folder first
 cd FitNEase-Setup
@@ -740,6 +859,7 @@ docker-compose up -d
 ```
 
 ### Stop services:
+
 ```bash
 # Must be in FitNEase-Setup folder
 cd FitNEase-Setup
@@ -747,6 +867,7 @@ docker-compose down
 ```
 
 ### View logs:
+
 ```bash
 # Must be in FitNEase-Setup folder
 cd FitNEase-Setup
@@ -754,6 +875,7 @@ docker-compose logs -f
 ```
 
 ### Check status:
+
 ```bash
 # Must be in FitNEase-Setup folder
 cd FitNEase-Setup
@@ -761,6 +883,7 @@ docker-compose ps
 ```
 
 ### Restart a specific service:
+
 ```bash
 # Must be in FitNEase-Setup folder
 cd FitNEase-Setup
@@ -768,6 +891,7 @@ docker-compose restart fitnease-auth
 ```
 
 ### Start mobile app:
+
 ```bash
 # Navigate to fitnease-client folder first
 cd FitNEase-Setup/fitnease-client
@@ -810,6 +934,7 @@ docker-compose down
 ```
 
 **Next time you want to work:**
+
 ```bash
 # 1. Start services (must be in FitNEase-Setup folder)
 cd FitNEase-Setup
@@ -873,6 +998,7 @@ FitNEase-Setup/
 Follow the steps above and you'll have FitNEase running on your laptop!
 
 **If you get stuck:**
+
 1. Check the troubleshooting section
 2. Read the error message carefully
 3. Check logs: `docker-compose logs -f`
@@ -887,6 +1013,7 @@ Follow the steps above and you'll have FitNEase running on your laptop!
 **Install:** Docker Desktop, Node.js, Git, Expo Go
 
 **Setup:**
+
 ```bash
 # 1. Clone and navigate
 git clone https://github.com/TheMeowgician/FitNEase-Setup.git
@@ -910,6 +1037,7 @@ npx expo start
 ```
 
 **Daily Use:**
+
 ```bash
 # Terminal 1 - Start backend (from FitNEase-Setup folder)
 cd FitNEase-Setup
@@ -921,6 +1049,7 @@ npx expo start
 ```
 
 **Shutdown:**
+
 ```bash
 # Press Ctrl+C in Expo terminal, then:
 cd FitNEase-Setup
