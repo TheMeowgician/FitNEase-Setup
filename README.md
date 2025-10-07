@@ -361,12 +361,49 @@ cd Desktop/FitNEase-Setup/fitnease-client
 pwd    # Should show: .../FitNEase-Setup/fitnease-client
 ```
 
-**Now install and start:**
+**Now install dependencies:**
 ```bash
-# Install dependencies (first time only)
 npm install
+```
 
-# Start Expo
+**IMPORTANT: Configure your IP address before starting Expo!**
+
+Open the file: `config/api.config.ts`
+
+**Windows:**
+```bash
+notepad config\api.config.ts
+```
+
+**Mac/Linux:**
+```bash
+nano config/api.config.ts
+```
+
+**Update the configuration:**
+
+1. Find your computer's IP address first:
+   - **Windows:** Open Command Prompt, run `ipconfig`, look for "IPv4 Address"
+   - **Mac:** Open Terminal, run `ifconfig | grep "inet "`, look for 192.168.x.x
+
+2. In the `api.config.ts` file:
+   ```typescript
+   // Change ACTIVE_MEMBER to your name
+   const ACTIVE_MEMBER = 'Gab'; // Change to: 'Gab', 'Wimari', 'Nhiko', or 'Chrystian'
+
+   // Update your IP in TEAM_IPS
+   const TEAM_IPS = {
+     Gab: '192.168.1.5',              // ← Replace with your actual IP
+     Wimari: 'CHANGE_THIS_TO_YOUR_IP',
+     Nhiko: 'CHANGE_THIS_TO_YOUR_IP',
+     Chrystian: 'CHANGE_THIS_TO_YOUR_IP',
+   };
+   ```
+
+3. Save the file and close the editor
+
+**Now start Expo:**
+```bash
 npx expo start
 ```
 
