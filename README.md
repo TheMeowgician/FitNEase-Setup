@@ -199,6 +199,144 @@ ML_SECRET_KEY=mysecretkey456
 
 ---
 
+### STEP 3.5: Configure Service Settings (Optional - 5 minutes)
+
+⚠️ **IMPORTANT:** Some services need personalized configuration to work properly on your machine.
+
+**First, create .env files for the services that need configuration:**
+
+**A. Configure Email Settings (Auth & Communications Services)**
+
+The auth and communications services need email configuration for sending verification emails and notifications.
+
+**Configure fitnease-auth:**
+```bash
+cd fitnease-auth
+
+# Create .env file from template
+cp .env.example .env   # Mac/Linux
+# OR
+copy .env.example .env  # Windows
+```
+
+Open `.env` and update email settings:
+
+**Windows:**
+```bash
+notepad .env
+```
+
+**Mac/Linux:**
+```bash
+nano .env
+```
+
+Find and update:
+```env
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USERNAME=your_email@gmail.com
+MAIL_PASSWORD="your_app_password_here"
+MAIL_FROM_ADDRESS=your_email@gmail.com
+MAIL_FROM_NAME="FitNEase"
+```
+
+Save and go back:
+```bash
+cd ..
+```
+
+**Configure fitnease-comms (same email settings):**
+```bash
+cd fitnease-comms
+
+# Create .env file from template
+cp .env.example .env   # Mac/Linux
+# OR
+copy .env.example .env  # Windows
+```
+
+Open `.env` and update the same email settings as above, then:
+```bash
+cd ..
+```
+
+**How to get Gmail App Password:**
+1. Go to your Google Account settings
+2. Enable 2-Step Verification
+3. Go to Security → 2-Step Verification → App passwords
+4. Generate a new app password for "FitNEase"
+5. Copy the 16-character password and use it in `MAIL_PASSWORD`
+
+---
+
+**B. Configure ML Service (Important for ML features)**
+
+The ML service has hardcoded IP addresses that need to match your computer's IP.
+
+```bash
+cd fitnease-ml
+
+# Create .env file from template
+cp .env.example .env   # Mac/Linux
+# OR
+copy .env.example .env  # Windows
+```
+
+Open `.env`:
+
+**Windows:**
+```bash
+notepad .env
+```
+
+**Mac/Linux:**
+```bash
+nano .env
+```
+
+Find your computer's IP address first:
+- **Windows:** Run `ipconfig` in Command Prompt, look for "IPv4 Address"
+- **Mac:** Run `ifconfig | grep "inet "` in Terminal
+
+Update these lines with YOUR IP address:
+```env
+# Replace 192.168.1.5 with YOUR IP address
+LARAVEL_AUTH_URL=http://YOUR_IP_HERE:8000
+LARAVEL_CONTENT_URL=http://YOUR_IP_HERE:8002
+LARAVEL_TRACKING_URL=http://YOUR_IP_HERE:8007
+LARAVEL_PLANNING_URL=http://YOUR_IP_HERE:8005
+LARAVEL_ENGAGEMENT_URL=http://YOUR_IP_HERE:8003
+```
+
+Example:
+```env
+LARAVEL_AUTH_URL=http://192.168.1.10:8000
+LARAVEL_CONTENT_URL=http://192.168.1.10:8002
+# ... etc
+```
+
+Save and go back:
+```bash
+cd ..
+```
+
+---
+
+💡 **Note:**
+- **Other services don't need manual .env configuration** - they work with default settings from .env.example (which gets used automatically by Docker)
+- If you skip these configurations:
+  - Email verification/notifications won't work (but registration still works)
+  - ML service might not connect to other services properly
+
+Make sure you're back in the FitNEase-Setup folder before continuing:
+```bash
+pwd    # Should show: .../FitNEase-Setup
+```
+
+---
+
 ### STEP 4: Start Docker Desktop (1 minute)
 
 1. Open **Docker Desktop** application
