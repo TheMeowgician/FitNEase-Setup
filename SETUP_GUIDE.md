@@ -103,6 +103,23 @@ FitNEase-Setup/
 
 ### STEP 2: Clone All Services (5-10 minutes)
 
+⚠️ **IMPORTANT: Make sure you're in the FitNEase-Setup folder first!**
+
+Check your current directory:
+```bash
+pwd    # Mac/Linux
+cd     # Windows
+```
+
+You should see: `.../FitNEase-Setup`
+
+If not, navigate to it:
+```bash
+cd FitNEase-Setup    # If you're one level up
+```
+
+**Now run the clone script:**
+
 **Windows:**
 ```bash
 clone-services.bat
@@ -138,6 +155,16 @@ FitNEase-Setup/
 ---
 
 ### STEP 3: Setup Environment Variables (5 minutes)
+
+⚠️ **IMPORTANT: You should still be in the FitNEase-Setup folder**
+
+Check your current directory:
+```bash
+pwd    # Mac/Linux - should show .../FitNEase-Setup
+cd     # Windows - should show ...\FitNEase-Setup
+```
+
+**Now create and edit the .env file:**
 
 **Windows:**
 ```bash
@@ -185,13 +212,25 @@ ML_SECRET_KEY=mysecretkey456
 
 ### STEP 5: Start Backend Services (10 minutes)
 
-```bash
-# Make sure you're in FitNEase-Setup folder
-cd FitNEase-Setup
+⚠️ **IMPORTANT: Make sure you're in the FitNEase-Setup folder**
 
-# Start all services (this takes 5-10 minutes first time)
+Check your current directory:
+```bash
+pwd    # Mac/Linux - should show .../FitNEase-Setup
+cd     # Windows - should show ...\FitNEase-Setup
+```
+
+If you're not in FitNEase-Setup, navigate to it:
+```bash
+cd FitNEase-Setup
+```
+
+**Now start all services:**
+```bash
 docker-compose up -d
 ```
+
+This takes 5-10 minutes the first time.
 
 **What this does:**
 - Builds and starts 10 backend services
@@ -217,6 +256,8 @@ All services should show "Up" or "healthy" status.
 
 ### STEP 6: Wait for Services to Initialize (2 minutes)
 
+⚠️ **IMPORTANT: You should still be in the FitNEase-Setup folder**
+
 Services need time to start up completely.
 
 **Wait 2-3 minutes**, then check logs:
@@ -229,6 +270,8 @@ Press `Ctrl+C` to stop viewing logs.
 ---
 
 ### STEP 7: Run Database Migrations (5 minutes)
+
+⚠️ **IMPORTANT: You should still be in the FitNEase-Setup folder**
 
 Run these commands one by one:
 
@@ -263,12 +306,38 @@ Migrated: ...
 
 ### STEP 8: Start Mobile App (5 minutes)
 
-**Open a NEW terminal window** (keep the other one open):
+**Open a NEW terminal window** (keep the other one open)
+
+⚠️ **IMPORTANT: Check where you are first!**
 
 ```bash
-# Go to mobile app folder
-cd FitNEase-Setup/fitnease-client
+pwd    # Mac/Linux
+cd     # Windows
+```
 
+**Navigate to the mobile app folder:**
+
+**If you're in FitNEase-Setup folder:**
+```bash
+cd fitnease-client
+```
+
+**If you're starting from Desktop or another location:**
+```bash
+# Windows example:
+cd Desktop\FitNEase-Setup\fitnease-client
+
+# Mac/Linux example:
+cd Desktop/FitNEase-Setup/fitnease-client
+```
+
+**Verify you're in the right place** - you should see:
+```bash
+pwd    # Should show: .../FitNEase-Setup/fitnease-client
+```
+
+**Now install and start:**
+```bash
 # Install dependencies (first time only)
 npm install
 
@@ -321,7 +390,13 @@ npx expo start
 
 ### Problem: "Port already in use"
 **Solution:**
+
+⚠️ **Make sure you're in the FitNEase-Setup folder first!**
+
 ```bash
+# Navigate to FitNEase-Setup folder
+cd FitNEase-Setup    # Adjust path if needed
+
 # Stop all services
 docker-compose down
 
@@ -352,7 +427,15 @@ Look for 192.168.x.x
 
 **Update API configuration:**
 
-Open: `fitnease-client/config/api.config.ts`
+Navigate to the client folder and open the config file:
+```bash
+# From FitNEase-Setup folder:
+cd fitnease-client
+
+# Open the file with your editor (choose one):
+notepad config/api.config.ts    # Windows
+nano config/api.config.ts        # Mac/Linux
+```
 
 Change `localhost` to your IP address:
 ```typescript
@@ -365,9 +448,10 @@ baseURL: 'http://192.168.1.100:8090/auth'
 
 Do this for all services in the config file.
 
-Then restart Expo:
+Then restart Expo (make sure you're in fitnease-client folder):
 ```bash
-# In fitnease-client folder
+pwd    # Should show: .../FitNEase-Setup/fitnease-client
+
 npx expo start --clear
 ```
 
@@ -386,7 +470,13 @@ npx expo start --clear
 
 ### Problem: "migration" command fails
 **Solution:**
+
+⚠️ **Make sure you're in the FitNEase-Setup folder first!**
+
 ```bash
+# Navigate to FitNEase-Setup folder
+cd FitNEase-Setup    # Adjust path if needed
+
 # Check if service is running
 docker-compose ps
 
@@ -409,7 +499,16 @@ docker-compose logs fitnease-auth
 
 ### Problem: App shows blank screen
 **Solution:**
+
+⚠️ **Make sure you're in the fitnease-client folder!**
+
 ```bash
+# Navigate to fitnease-client folder
+cd FitNEase-Setup/fitnease-client    # Adjust path if needed
+
+# Verify you're in the right place
+pwd    # Should show: .../FitNEase-Setup/fitnease-client
+
 # Clear cache and restart
 npx expo start --clear
 ```
@@ -418,35 +517,54 @@ npx expo start --clear
 
 ## 📞 Common Commands
 
+⚠️ **All commands require you to be in the correct directory!**
+
 ### Start services:
 ```bash
+# Navigate to FitNEase-Setup folder first
 cd FitNEase-Setup
+
+# Then start services
 docker-compose up -d
 ```
 
 ### Stop services:
 ```bash
+# Must be in FitNEase-Setup folder
+cd FitNEase-Setup
 docker-compose down
 ```
 
 ### View logs:
 ```bash
+# Must be in FitNEase-Setup folder
+cd FitNEase-Setup
 docker-compose logs -f
 ```
 
 ### Check status:
 ```bash
+# Must be in FitNEase-Setup folder
+cd FitNEase-Setup
 docker-compose ps
 ```
 
 ### Restart a specific service:
 ```bash
+# Must be in FitNEase-Setup folder
+cd FitNEase-Setup
 docker-compose restart fitnease-auth
 ```
 
 ### Start mobile app:
 ```bash
-cd fitnease-client
+# Navigate to fitnease-client folder first
+cd FitNEase-Setup/fitnease-client
+
+# Verify you're in the right place
+pwd    # Should show: .../FitNEase-Setup/fitnease-client
+
+# Then start Expo
 npx expo start
 ```
 
@@ -473,20 +591,21 @@ You'll know everything is working when:
 When you're done working:
 
 ```bash
-# Stop all services
+# 1. Stop Expo (press Ctrl+C in the terminal where Expo is running)
+
+# 2. Stop all services - navigate to FitNEase-Setup folder
 cd FitNEase-Setup
 docker-compose down
-
-# Stop Expo (press Ctrl+C in mobile app terminal)
 ```
 
 **Next time you want to work:**
 ```bash
-# Start services
+# 1. Start services (must be in FitNEase-Setup folder)
+cd FitNEase-Setup
 docker-compose up -d
 
-# Start mobile app
-cd fitnease-client
+# 2. Start mobile app (in a new terminal)
+cd FitNEase-Setup/fitnease-client
 npx expo start
 ```
 
@@ -558,23 +677,42 @@ Follow the steps above and you'll have FitNEase running on your laptop!
 
 **Setup:**
 ```bash
+# 1. Clone and navigate
 git clone https://github.com/TheMeowgician/FitNEase-Setup.git
 cd FitNEase-Setup
-./clone-services.sh    # or clone-services.bat
-cp .env.example .env   # Edit passwords!
+
+# 2. Clone all services
+./clone-services.sh    # or clone-services.bat on Windows
+
+# 3. Setup environment
+cp .env.example .env   # Then edit passwords!
+
+# 4. Start services
 docker-compose up -d
-# Run migrations (copy from STEP 7)
-cd fitnease-client && npm install && npx expo start
+
+# 5. Run migrations (copy from STEP 7)
+
+# 6. Start mobile app (new terminal)
+cd fitnease-client
+npm install
+npx expo start
 ```
 
 **Daily Use:**
 ```bash
+# Terminal 1 - Start backend (from FitNEase-Setup folder)
+cd FitNEase-Setup
 docker-compose up -d
-cd fitnease-client && npx expo start
+
+# Terminal 2 - Start mobile app (from fitnease-client folder)
+cd FitNEase-Setup/fitnease-client
+npx expo start
 ```
 
 **Shutdown:**
 ```bash
+# Press Ctrl+C in Expo terminal, then:
+cd FitNEase-Setup
 docker-compose down
 ```
 
