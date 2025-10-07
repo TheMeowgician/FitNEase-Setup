@@ -271,64 +271,10 @@ cd ..
 
 ---
 
-**B. Configure ML Service (Important for ML features)**
-
-The ML service has hardcoded IP addresses that need to match your computer's IP.
-
-```bash
-cd fitnease-ml
-
-# Create .env file from template
-cp .env.example .env   # Mac/Linux
-# OR
-copy .env.example .env  # Windows
-```
-
-Open `.env`:
-
-**Windows:**
-```bash
-notepad .env
-```
-
-**Mac/Linux:**
-```bash
-nano .env
-```
-
-Find your computer's IP address first:
-- **Windows:** Run `ipconfig` in Command Prompt, look for "IPv4 Address"
-- **Mac:** Run `ifconfig | grep "inet "` in Terminal
-
-Update these lines with YOUR IP address:
-```env
-# Replace 192.168.1.5 with YOUR IP address
-LARAVEL_AUTH_URL=http://YOUR_IP_HERE:8000
-LARAVEL_CONTENT_URL=http://YOUR_IP_HERE:8002
-LARAVEL_TRACKING_URL=http://YOUR_IP_HERE:8007
-LARAVEL_PLANNING_URL=http://YOUR_IP_HERE:8005
-LARAVEL_ENGAGEMENT_URL=http://YOUR_IP_HERE:8003
-```
-
-Example:
-```env
-LARAVEL_AUTH_URL=http://192.168.1.10:8000
-LARAVEL_CONTENT_URL=http://192.168.1.10:8002
-# ... etc
-```
-
-Save and go back:
-```bash
-cd ..
-```
-
----
-
 💡 **Note:**
-- **Other services don't need manual .env configuration** - they work with default settings from .env.example (which gets used automatically by Docker)
-- If you skip these configurations:
-  - Email verification/notifications won't work (but registration still works)
-  - ML service might not connect to other services properly
+- **All other services (including ML service) don't need manual .env configuration** - Docker Compose handles all their settings automatically
+- If you skip email configuration:
+  - Email verification/notifications won't work (but registration and login still work)
 
 Make sure you're back in the FitNEase-Setup folder before continuing:
 ```bash
