@@ -364,6 +364,13 @@ Press `Ctrl+C` to stop viewing logs.
 
 ⚠️ **IMPORTANT: You should still be in the FitNEase-Setup folder**
 
+⚠️ **If you changed your .env passwords after starting Docker containers:** You MUST reset the database volumes first, otherwise migrations will fail with "Access denied" errors. Run:
+```bash
+docker-compose down -v
+docker-compose up -d
+# Wait 2-3 minutes for databases to initialize
+```
+
 **First, install Composer dependencies for Laravel services:**
 
 Run these commands one by one:
