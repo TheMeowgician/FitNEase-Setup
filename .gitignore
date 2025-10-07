@@ -1,0 +1,44 @@
+# ============================================
+# FitNEase-Setup Repository .gitignore
+# ============================================
+
+# Don't commit actual environment files
+.env
+
+# Don't commit service folders (they're cloned separately by groupmates)
+fitnease-auth/
+fitnease-social/
+fitnease-tracking/
+fitnease-content/
+fitnease-comms/
+fitnease-engagement/
+fitnease-media/
+fitnease-ml/
+fitnease-operations/
+fitnease-planning/
+fitnease-client/
+
+# Don't commit node_modules
+node_modules/
+
+# Don't commit vendor folders
+vendor/
+
+# Don't commit database data
+*_db_data/
+*.sql
+*.sqlite
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+
+# Logs
+*.log
+npm-debug.log*

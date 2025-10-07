@@ -1,0 +1,776 @@
+services:
+  # API Gateway
+  api-gateway:
+    image: nginx:alpine
+    container_name: fitnease-gateway
+    ports:
+      - "8090:80"
+    volumes:
+      - ./nginx-gateway.conf:/etc/nginx/nginx.conf:ro
+    networks:
+      - fitnease-network
+    depends_on:
+      - fitnease-auth
+      - fitnease-content
+      - fitnease-comms
+      - fitnease-engagement
+      - fitnease-media
+      - fitnease-ml
+      - fitnease-operations
+      - fitnease-planning
+      - fitnease-social
+      - fitnease-tracking
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health", "||", "exit", "1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  # Authentication Service
+  fitnease-auth:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        SERVICE_DIR: ./fitnease-auth
+    container_name: fitnease-auth
+    ports:
+      - "8000:80"
+    volumes:
+      - ./fitnease-auth:/var/www/html
+      - ./docker/nginx.conf:/etc/nginx/sites-available/default
+      - ./docker/supervisord.conf:/etc/supervisor/conf.d/supervisord.conf
+    environment:
+      - APP_NAME=FitNEase-Auth
+      - APP_ENV=${APP_ENV}
+      - APP_DEBUG=${APP_DEBUG}
+      - DB_CONNECTION=mysql
+      - DB_HOST=fitnease-auth-db
+      - DB_PORT=3306
+      - DB_DATABASE=fitnease_auth_db
+      - DB_USERNAME=root
+      - DB_PASSWORD=${DB_PASSWORD}
+      - AUTH_SERVICE_URL=${AUTH_SERVICE_URL}
+      - CONTENT_SERVICE_URL=${CONTENT_SERVICE_URL}
+      - COMMS_SERVICE_URL=${COMMS_SERVICE_URL}
+      - ENGAGEMENT_SERVICE_URL=${ENGAGEMENT_SERVICE_URL}
+    networks:
+      - fitnease-network
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      - fitnease-auth-db
+      - redis
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health", "||", "exit", "1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # Content Service
+  fitnease-content:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        SERVICE_DIR: ./fitnease-content
+    container_name: fitnease-content
+    ports:
+      - "8002:80"
+    volumes:
+      - ./fitnease-content:/var/www/html
+      - ./docker/nginx.conf:/etc/nginx/sites-available/default
+      - ./docker/supervisord.conf:/etc/supervisor/conf.d/supervisord.conf
+    environment:
+      - APP_NAME=FitNEase-Content
+      - APP_ENV=${APP_ENV}
+      - APP_DEBUG=${APP_DEBUG}
+      - DB_CONNECTION=mysql
+      - DB_HOST=fitnease-content-db
+      - DB_PORT=3306
+      - DB_DATABASE=fitnease_content_db
+      - DB_USERNAME=root
+      - DB_PASSWORD=${DB_PASSWORD}
+      - AUTH_SERVICE_URL=${AUTH_SERVICE_URL}
+      - CONTENT_SERVICE_URL=${CONTENT_SERVICE_URL}
+      - COMMS_SERVICE_URL=${COMMS_SERVICE_URL}
+      - ENGAGEMENT_SERVICE_URL=${ENGAGEMENT_SERVICE_URL}
+    networks:
+      - fitnease-network
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      - fitnease-auth
+      - fitnease-content-db
+      - redis
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health", "||", "exit", "1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # Communications Service
+  fitnease-comms:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        SERVICE_DIR: ./fitnease-comms
+    container_name: fitnease-comms
+    ports:
+      - "8001:80"
+    volumes:
+      - ./fitnease-comms:/var/www/html
+      - ./docker/nginx.conf:/etc/nginx/sites-available/default
+      - ./docker/supervisord.conf:/etc/supervisor/conf.d/supervisord.conf
+    environment:
+      - APP_NAME=FitNEase-Comms
+      - APP_ENV=${APP_ENV}
+      - APP_DEBUG=${APP_DEBUG}
+      - DB_CONNECTION=mysql
+      - DB_HOST=fitnease-comms-db
+      - DB_PORT=3306
+      - DB_DATABASE=fitnease_comms_db
+      - DB_USERNAME=root
+      - DB_PASSWORD=${DB_PASSWORD}
+      - AUTH_SERVICE_URL=${AUTH_SERVICE_URL}
+      - CONTENT_SERVICE_URL=${CONTENT_SERVICE_URL}
+      - COMMS_SERVICE_URL=${COMMS_SERVICE_URL}
+      - ENGAGEMENT_SERVICE_URL=${ENGAGEMENT_SERVICE_URL}
+    networks:
+      - fitnease-network
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      - fitnease-auth
+      - fitnease-comms-db
+      - redis
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health", "||", "exit", "1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # Engagement Service
+  fitnease-engagement:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        SERVICE_DIR: ./fitnease-engagement
+    container_name: fitnease-engagement
+    ports:
+      - "8003:80"
+    volumes:
+      - ./fitnease-engagement:/var/www/html
+      - ./docker/nginx.conf:/etc/nginx/sites-available/default
+      - ./docker/supervisord.conf:/etc/supervisor/conf.d/supervisord.conf
+    environment:
+      - APP_NAME=FitNEase-Engagement
+      - APP_ENV=${APP_ENV}
+      - APP_DEBUG=${APP_DEBUG}
+      - DB_CONNECTION=mysql
+      - DB_HOST=fitnease-engagement-db
+      - DB_PORT=3306
+      - DB_DATABASE=fitnease_engagement_db
+      - DB_USERNAME=root
+      - DB_PASSWORD=${DB_PASSWORD}
+      - AUTH_SERVICE_URL=${AUTH_SERVICE_URL}
+      - CONTENT_SERVICE_URL=${CONTENT_SERVICE_URL}
+      - COMMS_SERVICE_URL=${COMMS_SERVICE_URL}
+      - ENGAGEMENT_SERVICE_URL=${ENGAGEMENT_SERVICE_URL}
+      - ML_SERVICE_URL=${ML_SERVICE_URL}
+      - TRACKING_SERVICE_URL=${TRACKING_SERVICE_URL}
+    networks:
+      - fitnease-network
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      - fitnease-auth
+      - fitnease-engagement-db
+      - redis
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health", "||", "exit", "1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # Media Service
+  fitnease-media:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        SERVICE_DIR: ./fitnease-media
+    container_name: fitnease-media
+    ports:
+      - "8004:80"
+    volumes:
+      - ./fitnease-media:/var/www/html
+      - ./docker/nginx.conf:/etc/nginx/sites-available/default
+      - ./docker/supervisord.conf:/etc/supervisor/conf.d/supervisord.conf
+      - media_storage:/var/www/html/storage/app/public/media
+    environment:
+      - APP_NAME=FitNEase-Media
+      - APP_ENV=${APP_ENV}
+      - APP_DEBUG=${APP_DEBUG}
+      - DB_CONNECTION=mysql
+      - DB_HOST=fitnease-media-db
+      - DB_PORT=3306
+      - DB_DATABASE=fitnease_media_db
+      - DB_USERNAME=root
+      - DB_PASSWORD=${DB_PASSWORD}
+      - AUTH_SERVICE_URL=${AUTH_SERVICE_URL}
+      - CONTENT_SERVICE_URL=${CONTENT_SERVICE_URL}
+      - COMMS_SERVICE_URL=${COMMS_SERVICE_URL}
+      - ENGAGEMENT_SERVICE_URL=${ENGAGEMENT_SERVICE_URL}
+      - MEDIA_SERVICE_URL=${MEDIA_SERVICE_URL}
+      - ML_SERVICE_URL=${ML_SERVICE_URL}
+      - CDN_BASE_URL=${CDN_BASE_URL}
+      - STREAMING_SECRET=${STREAMING_SECRET}
+      - INTERNAL_SERVICE_TOKEN=${INTERNAL_SERVICE_TOKEN}
+    networks:
+      - fitnease-network
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      - fitnease-auth
+      - fitnease-media-db
+      - redis
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health", "||", "exit", "1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # Operations Service
+  fitnease-operations:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        SERVICE_DIR: ./fitnease-operations
+    container_name: fitnease-operations
+    ports:
+      - "8010:80"
+    volumes:
+      - ./fitnease-operations:/var/www/html
+      - ./docker/nginx.conf:/etc/nginx/sites-available/default
+      - ./docker/supervisord.conf:/etc/supervisor/conf.d/supervisord.conf
+    environment:
+      - APP_NAME=FitNEase-Operations
+      - APP_ENV=${APP_ENV}
+      - APP_DEBUG=${APP_DEBUG}
+      - DB_CONNECTION=mysql
+      - DB_HOST=fitnease-operations-db
+      - DB_PORT=3306
+      - DB_DATABASE=fitnease_operations_db
+      - DB_USERNAME=root
+      - DB_PASSWORD=${DB_PASSWORD}
+      - AUTH_SERVICE_URL=${AUTH_SERVICE_URL}
+      - CONTENT_SERVICE_URL=${CONTENT_SERVICE_URL}
+      - COMMS_SERVICE_URL=${COMMS_SERVICE_URL}
+      - ENGAGEMENT_SERVICE_URL=${ENGAGEMENT_SERVICE_URL}
+      - MEDIA_SERVICE_URL=${MEDIA_SERVICE_URL}
+      - ML_SERVICE_URL=${ML_SERVICE_URL}
+      - TRACKING_SERVICE_URL=${TRACKING_SERVICE_URL}
+      - PLANNING_SERVICE_URL=${PLANNING_SERVICE_URL}
+      - OPERATIONS_SERVICE_URL=${OPERATIONS_SERVICE_URL}
+      - REDIS_HOST=fitnease-redis
+      - REDIS_PORT=6379
+    networks:
+      - fitnease-network
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      - fitnease-operations-db
+      - redis
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health", "||", "exit", "1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # Planning Service
+  fitnease-planning:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        SERVICE_DIR: ./fitnease-planning
+    container_name: fitnease-planning
+    ports:
+      - "8005:80"
+    volumes:
+      - ./fitnease-planning:/var/www/html
+      - ./docker/nginx.conf:/etc/nginx/sites-available/default
+      - ./docker/supervisord.conf:/etc/supervisor/conf.d/supervisord.conf
+    environment:
+      - APP_NAME=FitNEase-Planning
+      - APP_ENV=${APP_ENV}
+      - APP_DEBUG=${APP_DEBUG}
+      - DB_CONNECTION=mysql
+      - DB_HOST=fitnease-planning-db
+      - DB_PORT=3306
+      - DB_DATABASE=fitnease_planning_db
+      - DB_USERNAME=root
+      - DB_PASSWORD=${DB_PASSWORD}
+      - AUTH_SERVICE_URL=${AUTH_SERVICE_URL}
+      - CONTENT_SERVICE_URL=${CONTENT_SERVICE_URL}
+      - COMMS_SERVICE_URL=${COMMS_SERVICE_URL}
+      - ENGAGEMENT_SERVICE_URL=${ENGAGEMENT_SERVICE_URL}
+      - MEDIA_SERVICE_URL=${MEDIA_SERVICE_URL}
+      - ML_SERVICE_URL=${ML_SERVICE_URL}
+      - TRACKING_SERVICE_URL=${TRACKING_SERVICE_URL}
+      - PLANNING_SERVICE_URL=${PLANNING_SERVICE_URL}
+      - OPERATIONS_SERVICE_URL=${OPERATIONS_SERVICE_URL}
+      - REDIS_HOST=fitnease-redis
+      - REDIS_PORT=6379
+    networks:
+      - fitnease-network
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      - fitnease-auth
+      - fitnease-planning-db
+      - redis
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health", "||", "exit", "1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # Social Service
+  fitnease-social:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        SERVICE_DIR: ./fitnease-social
+    container_name: fitnease-social
+    ports:
+      - "8006:80"
+    volumes:
+      - ./fitnease-social:/var/www/html
+      - ./docker/nginx.conf:/etc/nginx/sites-available/default
+      - ./docker/supervisord.conf:/etc/supervisor/conf.d/supervisord.conf
+    environment:
+      - APP_NAME=FitNEase-Social
+      - APP_ENV=${APP_ENV}
+      - APP_DEBUG=${APP_DEBUG}
+      - DB_CONNECTION=mysql
+      - DB_HOST=fitnease-social-db
+      - DB_PORT=3306
+      - DB_DATABASE=fitnease_social_db
+      - DB_USERNAME=root
+      - DB_PASSWORD=${DB_PASSWORD}
+      - AUTH_SERVICE_URL=${AUTH_SERVICE_URL}
+      - CONTENT_SERVICE_URL=${CONTENT_SERVICE_URL}
+      - COMMS_SERVICE_URL=${COMMS_SERVICE_URL}
+      - ENGAGEMENT_SERVICE_URL=${ENGAGEMENT_SERVICE_URL}
+      - MEDIA_SERVICE_URL=${MEDIA_SERVICE_URL}
+      - ML_SERVICE_URL=${ML_SERVICE_URL}
+      - TRACKING_SERVICE_URL=${TRACKING_SERVICE_URL}
+      - PLANNING_SERVICE_URL=${PLANNING_SERVICE_URL}
+      - OPERATIONS_SERVICE_URL=${OPERATIONS_SERVICE_URL}
+      - SOCIAL_SERVICE_URL=${SOCIAL_SERVICE_URL}
+      - REDIS_HOST=fitnease-redis
+      - REDIS_PORT=6379
+    networks:
+      - fitnease-network
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      - fitnease-auth
+      - fitnease-social-db
+      - redis
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health", "||", "exit", "1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # Tracking Service
+  fitnease-tracking:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        SERVICE_DIR: ./fitnease-tracking
+    container_name: fitnease-tracking
+    ports:
+      - "8007:80"
+    volumes:
+      - ./fitnease-tracking:/var/www/html
+      - ./docker/nginx.conf:/etc/nginx/sites-available/default
+      - ./docker/supervisord.conf:/etc/supervisor/conf.d/supervisord.conf
+    environment:
+      - APP_NAME=FitNEase-Tracking
+      - APP_ENV=${APP_ENV}
+      - APP_DEBUG=${APP_DEBUG}
+      - DB_CONNECTION=mysql
+      - DB_HOST=fitnease-tracking-db
+      - DB_PORT=3306
+      - DB_DATABASE=fitnease_tracking_db
+      - DB_USERNAME=root
+      - DB_PASSWORD=${DB_PASSWORD}
+      - AUTH_SERVICE_URL=${AUTH_SERVICE_URL}
+      - CONTENT_SERVICE_URL=${CONTENT_SERVICE_URL}
+      - COMMS_SERVICE_URL=${COMMS_SERVICE_URL}
+      - ENGAGEMENT_SERVICE_URL=${ENGAGEMENT_SERVICE_URL}
+      - MEDIA_SERVICE_URL=${MEDIA_SERVICE_URL}
+      - ML_SERVICE_URL=${ML_SERVICE_URL}
+      - TRACKING_SERVICE_URL=${TRACKING_SERVICE_URL}
+      - PLANNING_SERVICE_URL=${PLANNING_SERVICE_URL}
+      - OPERATIONS_SERVICE_URL=${OPERATIONS_SERVICE_URL}
+      - SOCIAL_SERVICE_URL=${SOCIAL_SERVICE_URL}
+      - REDIS_HOST=fitnease-redis
+      - REDIS_PORT=6379
+    networks:
+      - fitnease-network
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      - fitnease-auth
+      - fitnease-tracking-db
+      - redis
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health", "||", "exit", "1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # ML Service
+  fitnease-ml:
+    build:
+      context: ./fitnease-ml
+      dockerfile: Dockerfile
+    container_name: fitnease-ml
+    ports:
+      - "8009:5000"
+    volumes:
+      - ./fitnease-ml:/app
+    environment:
+      - LARAVEL_AUTH_URL=http://fitnease-auth:80
+      - LARAVEL_CONTENT_URL=http://fitnease-content:80
+      - LARAVEL_TRACKING_URL=http://fitnease-tracking:80
+      - LARAVEL_PLANNING_URL=http://fitnease-planning:80
+      - LARAVEL_ENGAGEMENT_URL=http://fitnease-engagement:80
+      - ML_DB_HOST=fitnease-ml-db
+      - ML_DB_PORT=3306
+      - ML_DB_NAME=fitnease_ml_db
+      - ML_DB_USER=root
+      - ML_DB_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MODEL_RETRAIN_INTERVAL=24
+      - MODEL_CONFIDENCE_THRESHOLD=0.7
+      - HYBRID_CONTENT_WEIGHT=0.6
+      - HYBRID_COLLABORATIVE_WEIGHT=0.4
+      - FLASK_ENV=production
+      - FLASK_DEBUG=False
+      - FLASK_PORT=5000
+      - SECRET_KEY=${ML_SECRET_KEY}
+      - REQUEST_TIMEOUT=30
+      - MAX_RETRIES=3
+      - RECOMMENDATION_CACHE_TTL=300
+      - BATCH_SIZE_LIMIT=100
+      - MAX_RECOMMENDATIONS=50
+      - CORS_ENABLED=True
+      - ALLOWED_ORIGINS=*
+      - LOG_LEVEL=INFO
+    networks:
+      - fitnease-network
+    depends_on:
+      - fitnease-ml-db
+      - fitnease-auth
+      - fitnease-content
+      - fitnease-tracking
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health", "||", "exit", "1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # MySQL Databases
+  fitnease-auth-db:
+    image: mysql:8.0
+    container_name: fitnease-auth-db
+    ports:
+      - "3307:3306"
+    environment:
+      - MYSQL_DATABASE=fitnease_auth_db
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_ALLOW_EMPTY_PASSWORD=false
+    volumes:
+      - auth_db_data:/var/lib/mysql
+    networks:
+      - fitnease-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  fitnease-content-db:
+    image: mysql:8.0
+    container_name: fitnease-content-db
+    ports:
+      - "3308:3306"
+    environment:
+      - MYSQL_DATABASE=fitnease_content_db
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_ALLOW_EMPTY_PASSWORD=false
+    volumes:
+      - content_db_data:/var/lib/mysql
+    networks:
+      - fitnease-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  fitnease-comms-db:
+    image: mysql:8.0
+    container_name: fitnease-comms-db
+    ports:
+      - "3309:3306"
+    environment:
+      - MYSQL_DATABASE=fitnease_comms_db
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_ALLOW_EMPTY_PASSWORD=false
+    volumes:
+      - comms_db_data:/var/lib/mysql
+    networks:
+      - fitnease-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  fitnease-engagement-db:
+    image: mysql:8.0
+    container_name: fitnease-engagement-db
+    ports:
+      - "3310:3306"
+    environment:
+      - MYSQL_DATABASE=fitnease_engagement_db
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_ALLOW_EMPTY_PASSWORD=false
+    volumes:
+      - engagement_db_data:/var/lib/mysql
+    networks:
+      - fitnease-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  fitnease-media-db:
+    image: mysql:8.0
+    container_name: fitnease-media-db
+    ports:
+      - "3311:3306"
+    environment:
+      - MYSQL_DATABASE=fitnease_media_db
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_ALLOW_EMPTY_PASSWORD=false
+    volumes:
+      - media_db_data:/var/lib/mysql
+    networks:
+      - fitnease-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  fitnease-operations-db:
+    image: mysql:8.0
+    container_name: fitnease-operations-db
+    ports:
+      - "3312:3306"
+    environment:
+      - MYSQL_DATABASE=fitnease_operations_db
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_ALLOW_EMPTY_PASSWORD=false
+    volumes:
+      - operations_db_data:/var/lib/mysql
+    networks:
+      - fitnease-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  fitnease-planning-db:
+    image: mysql:8.0
+    container_name: fitnease-planning-db
+    ports:
+      - "3313:3306"
+    environment:
+      - MYSQL_DATABASE=fitnease_planning_db
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_ALLOW_EMPTY_PASSWORD=false
+    volumes:
+      - planning_db_data:/var/lib/mysql
+    networks:
+      - fitnease-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  fitnease-social-db:
+    image: mysql:8.0
+    container_name: fitnease-social-db
+    ports:
+      - "3314:3306"
+    environment:
+      - MYSQL_DATABASE=fitnease_social_db
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_ALLOW_EMPTY_PASSWORD=false
+    volumes:
+      - social_db_data:/var/lib/mysql
+    networks:
+      - fitnease-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  fitnease-tracking-db:
+    image: mysql:8.0
+    container_name: fitnease-tracking-db
+    ports:
+      - "3315:3306"
+    environment:
+      - MYSQL_DATABASE=fitnease_tracking_db
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_ALLOW_EMPTY_PASSWORD=false
+    volumes:
+      - tracking_db_data:/var/lib/mysql
+    networks:
+      - fitnease-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  fitnease-ml-db:
+    image: mysql:8.0
+    container_name: fitnease-ml-db
+    ports:
+      - "3316:3306"
+    environment:
+      - MYSQL_DATABASE=fitnease_ml_db
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_ALLOW_EMPTY_PASSWORD=false
+    volumes:
+      - ml_db_data:/var/lib/mysql
+    networks:
+      - fitnease-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: fitnease-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - fitnease-network
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # phpMyAdmin
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: fitnease-phpmyadmin
+    ports:
+      - "8080:80"
+    environment:
+      #- PMA_ARBITRARY=1
+      #- PMA_ABSOLUTE_URI=http://localhost:8080/
+      - PMA_ABSOLUTE_URI=http://localhost:8080/
+      - PMA_HOSTS=fitnease-auth-db,fitnease-content-db,fitnease-comms-db,fitnease-engagement-db,fitnease-media-db,fitnease-ml-db,fitnease-operations-db,fitnease-planning-db,fitnease-social-db,fitnease-tracking-db
+      #- PMA_PORTS=3306,3306,3306,3306,3306,3306,3306
+      - PMA_USER=root
+      - PMA_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    networks:
+      - fitnease-network
+    depends_on:
+      - fitnease-auth-db
+      - fitnease-content-db
+      - fitnease-comms-db
+      - fitnease-engagement-db
+      - fitnease-media-db
+      - fitnease-ml-db
+      - fitnease-operations-db
+      - fitnease-planning-db
+      - fitnease-social-db
+      - fitnease-tracking-db
+
+volumes:
+  redis_data:
+  auth_db_data:
+  content_db_data:
+  comms_db_data:
+  engagement_db_data:
+  media_db_data:
+  ml_db_data:
+  operations_db_data:
+  planning_db_data:
+  social_db_data:
+  tracking_db_data:
+  media_storage:
+
+networks:
+  fitnease-network:
+    driver: bridge
