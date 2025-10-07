@@ -181,21 +181,31 @@ Find these lines and replace `CHANGE_THIS_PASSWORD` with your own passwords:
 
 ```env
 # CHANGE THESE!
-MYSQL_ROOT_PASSWORD=your_password_here
-DB_PASSWORD=your_password_here
-ML_SECRET_KEY=your_secret_key_here
+DB_PASSWORD=CHANGE_THIS_PASSWORD
+MYSQL_ROOT_PASSWORD=CHANGE_THIS_PASSWORD
 ```
+
+⚠️ **VERY IMPORTANT:** `DB_PASSWORD` and `MYSQL_ROOT_PASSWORD` **MUST BE THE SAME VALUE**!
 
 **Example:**
 ```env
-MYSQL_ROOT_PASSWORD=mypassword123
+# Both passwords must match!
 DB_PASSWORD=mypassword123
-ML_SECRET_KEY=mysecretkey456
+MYSQL_ROOT_PASSWORD=mypassword123
+```
+
+**Recommended simple password for local testing:** `rootpassword`
+
+```env
+DB_PASSWORD=rootpassword
+MYSQL_ROOT_PASSWORD=rootpassword
 ```
 
 **Save and close the file.**
 
-⚠️ **Important:** Use simple passwords for local testing (no special characters that might cause issues)
+⚠️ **Important:**
+- Use simple passwords for local testing (no special characters that might cause issues)
+- The two database passwords MUST be identical or migrations will fail
 
 ---
 
