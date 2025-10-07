@@ -266,11 +266,39 @@ Press `Ctrl+C` to stop viewing logs.
 
 ---
 
-### STEP 7: Run Database Migrations (5 minutes)
+### STEP 7: Install Dependencies and Run Migrations (10 minutes)
 
 ⚠️ **IMPORTANT: You should still be in the FitNEase-Setup folder**
 
+**First, install Composer dependencies for Laravel services:**
+
 Run these commands one by one:
+
+```bash
+docker-compose exec fitnease-auth composer install
+
+docker-compose exec fitnease-social composer install
+
+docker-compose exec fitnease-tracking composer install
+
+docker-compose exec fitnease-content composer install
+
+docker-compose exec fitnease-comms composer install
+
+docker-compose exec fitnease-engagement composer install
+
+docker-compose exec fitnease-media composer install
+
+docker-compose exec fitnease-operations composer install
+
+docker-compose exec fitnease-planning composer install
+```
+
+**Note:** fitnease-ml is a Python Flask service and doesn't need composer install (Python dependencies are installed automatically when the container starts)
+
+**Wait for all composer installs to complete (each takes 30-60 seconds)**
+
+**Then run database migrations for Laravel services:**
 
 ```bash
 docker-compose exec fitnease-auth php artisan migrate --force
@@ -292,7 +320,7 @@ docker-compose exec fitnease-operations php artisan migrate --force
 docker-compose exec fitnease-planning php artisan migrate --force
 ```
 
-**Each command should show:**
+**Each migration command should show:**
 ```
 Migration table created successfully.
 Migrating: ...
