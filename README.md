@@ -430,6 +430,33 @@ Migrated: ...
 
 ---
 
+### STEP 7.5: Seed Exercise Database (2 minutes)
+
+⚠️ **IMPORTANT: You should still be in the FitNEase-Setup folder**
+
+The content service needs to load 1,100+ exercises from CSV files into the database.
+
+**Run the exercise seeder:**
+```bash
+docker-compose exec fitnease-content php artisan db:seed --class=ExerciseSeeder
+```
+
+**You should see:**
+```
+🔄 Loading exercises from ML training dataset...
+✅ Inserted 50 exercises...
+✅ Inserted 100 exercises...
+... (continues)
+🎉 Successfully imported 1140 exercises from ML training dataset!
+📊 Dataset source: bodyweight_exercises_complete.csv (1,140 exercises)
+🤖 Ready for ML model integration!
+```
+
+💡 **If you see "CSV file not found" error:**
+The CSV files should be included in the repository. If they're missing, contact the team lead (Gab) to get the exercise data files.
+
+---
+
 ### STEP 8: Start Mobile App (5 minutes)
 
 **Open a NEW terminal window** (keep the other one open)
